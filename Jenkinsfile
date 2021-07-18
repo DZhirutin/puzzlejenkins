@@ -33,9 +33,7 @@ pipeline {
                 script {
                       def shellCmd = "bash ./server-cmds.sh ${IMAGE_NAME}"
                       def googleInstance = "root@35.225.28.184"
-                    /*def dockerComposeCmd = "docker-compose -f docker-compose.yaml up --detach"*/
-                    /*def dockerCmd = 'docker run -d -p 8083:8080 dzhirutin/my-repo:prod-1.0'*/
-                     sshagent(['ec2-user-key']) {
+                      sshagent(['ansible-server-key']) {
                        sh "scp -v -o StrictHostKeyChecking=no server-cmds.sh ${googleInstance}:/root"  
                        sh "scp -v -o StrictHostKeyChecking=no docker-compose.yaml ${googleInstance}:/root"
                        sh "ssh -o StrictHostKeyChecking=no ${googleInstance} ${shellCmd}"
