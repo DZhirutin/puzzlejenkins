@@ -1,6 +1,6 @@
 version: '3.3'
 services:
-    java-maven-app:
+    puzzle15-app:
       image: ${IMAGE}
       ports:
         - 8083:8080
