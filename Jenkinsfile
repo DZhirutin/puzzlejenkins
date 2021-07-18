@@ -30,6 +30,9 @@ pipeline {
             }
         }
         stage("run docker on Prod") {
+            input {
+                   message "Confirm push docker images"
+            }
             steps {
                 script {
                       def shellCmd = "bash ./server-cmds.sh ${IMAGE_NAME}"
