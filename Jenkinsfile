@@ -28,20 +28,6 @@ pipeline {
                 }
             }
         }
-        stage ("Login dockerhub") {
-            steps { 
-                script {
-                    echo "Make login DockerHub..."
-                    sshagent(['ansible-server-key']) {                        
-                        withCredentials([usernamePassword(credentialsId: 'DockerHub', passwordVariable: 'PASS', usernameVariable: 'USER')])  {
-                        sh "echo $PASS | docker login -u $USER --password-stdin"    
-                                            
-                        }
-                    }
-                }
-            }
-        }
-
         stage("run docker on Prod") {
             steps {
                 script {
@@ -50,7 +36,11 @@ pipeline {
                       sshagent(['ansible-server-key']) {
                        sh "scp -v -o StrictHostKeyChecking=no server-cmds.sh ${googleInstance}:/root"  
                        sh "scp -v -o StrictHostKeyChecking=no docker-compose.yaml ${googleInstance}:/root"
-                       sh "ssh -o StrictHostKeyChecking=no ${googleInstance} ${shellCmd}"
+                       sshagent(['ansible-server-key']) {                        
+                        withCredentials([usernamePassword(credentialsId: 'DockerHub', passwordVariable: 'PASS', usernameVariable: 'USER')])  {
+                        sh "echo $PASS | docker login -u $USER --password-stdin"    
+                        sh "ssh -o StrictHostKeyChecking=no ${googleInstance} ${shellCmd}"                  
+                        }                       
                     }
                  } 
             }
