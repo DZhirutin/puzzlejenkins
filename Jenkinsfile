@@ -32,9 +32,11 @@ pipeline {
             steps { 
                 script {
                     echo "Make login DockerHub..."
-                     sshagent(['ansible-server-key']) {
-                      withCredentials([usernamePassword(credentialsId: 'DockerHub', passwordVariable: 'PASS', usernameVariable: 'USER')])  {
-                        sh "echo $PASS | docker login -u $USER --password-stdin"                        
+                    sshagent(['ansible-server-key']) {                        
+                        withCredentials([usernamePassword(credentialsId: 'DockerHub', passwordVariable: 'PASS', usernameVariable: 'USER')])  {
+                        sh "echo $PASS | docker login -u $USER --password-stdin"    
+                                            
+                        }
                     }
                 }
             }
