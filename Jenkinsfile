@@ -6,6 +6,7 @@ pipeline {
     }
     environment {
         IMAGE_NAME = 'dzhirutin/my-repo:puzzle15-1.0'
+        REMOVE_INSTANCE = 'root@35.225.28.184'
         }
 
     stages {
@@ -32,7 +33,7 @@ pipeline {
             steps {
                 script {
                       def shellCmd = "bash ./server-cmds.sh ${IMAGE_NAME}"
-                      def googleInstance = "root@35.225.28.184"
+                      def googleInstance = "${REMOVE_INSTANCE}"
                       sshagent(['ansible-server-key']) {
                        sh "scp -v -o StrictHostKeyChecking=no server-cmds.sh ${googleInstance}:/root"  
                        sh "scp -v -o StrictHostKeyChecking=no docker-compose.yaml ${googleInstance}:/root"
