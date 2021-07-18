@@ -6,9 +6,10 @@ pipeline {
     }
 
     stages {
-        stage ("build app") {
+        stage ("build puzzle15") {
             steps {
-                echo "git clone"
+                sh "mvn package"
+                sh "mvn compile war:war"
             }
         }
     }
